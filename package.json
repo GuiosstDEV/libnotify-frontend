@@ -1,0 +1,28 @@
+{
+  "name": "libnotify-frontend",
+  "version": "1.0.0",
+  "description": "Frontend LibNotify - Webapp para gerenciar e exibir slides",
+  "main": "dist/js/bundle.min.js",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "npm run build && echo 'Frontend pronto em dist/'",
+    "start": "npm run build && http-server dist -p 3001"
+  },
+  "keywords": [
+    "slides",
+    "display",
+    "realtime",
+    "firebase"
+  ],
+  "author": "LibNotify Team",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "terser": "^5.48.0",
+    "terser-webpack-plugin": "^5.3.9"
+  },
+  "dependencies": {
+    "firebase": "^10.7.0"
+  }
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Admin Load</title>
+</head>
+<body>
+  <h1>Test Admin Script Loading</h1>
+  <button onclick="testApiClient()">Test apiClient</button>
+  <button onclick="testAdmin()">Test Admin</button>
+
+  <script src="src/js/api-client.js"></script>
+  <script defer src="src/js/admin.js"></script>
+
+  <script>
+    function testApiClient() {
+      console.log('apiClient:', typeof window.apiClient);
+      console.log('window.apiClient.login:', typeof window.apiClient?.login);
+    }
+
+    function testAdmin() {
+      console.log('selecionarPerfil:', typeof window.selecionarPerfil);
+      console.log('fazerLogin:', typeof window.fazerLogin);
+      console.log('All admin functions loaded');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM loaded');
+      testApiClient();
+      setTimeout(() => {
+        testAdmin();
+      }, 500);
+    });
+  </script>
+</body>
+</html>

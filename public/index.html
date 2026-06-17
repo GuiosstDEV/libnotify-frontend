@@ -1,0 +1,241 @@
+﻿<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#667eea" />
+  <meta name="description" content="LibNotify - Sistema de avisos e informações para biblioteca em tempo real" />
+  <title>LibNotify</title>
+
+  <!-- PWA MANIFEST -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="./assets/imagem/libnotify-icon.png" />
+  <link rel="apple-touch-icon" href="./assets/imagem/libnotify-icon.png" />
+
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <!-- ESTILOS PERSONALIZADOS -->
+  <link rel="stylesheet" href="src/css/index.css" />
+  <link rel="stylesheet" href="src/css/slides-padrao.css" />
+</head>
+
+<body>
+  <!-- SETAS NAVEGAÇÃO -->
+  <div class="setas-borda esquerda" onclick="anteriorSlide()">
+    <img src="bootstrap/chevron-compact-left.svg" alt="Anterior" class="seta-icon">
+  </div>
+  <div class="setas-borda direita" onclick="proximoSlide()">
+    <img src="bootstrap/chevron-compact-right.svg" alt="Próximo" class="seta-icon">
+  </div>
+
+  <!-- INDICADORES -->
+  <div class="indicador">
+    <span id="slide-numero">1</span> / <span id="total-slides">5</span>
+  </div>
+  <div class="temporizador">
+    <i class="fas fa-clock"></i> <span id="contadorSegundos">10</span>s
+  </div>
+
+  <!-- SLIDES CARREGADOS DINAMICAMENTE -->
+  <div id="slides-container">
+    <!-- SLIDE 1 -->
+    <div class="slide slide-1 active">
+      <div class="conteudo-wrapper">
+        <div class="icon-grande"><i class="fas fa-bag-shopping"></i></div>
+        <div class="titulo-principal">⚠️ ATENÇÃO ⚠️</div>
+        <div class="card-info">
+          <div class="subtitulo">Guarde suas bolsas</div>
+          <div class="subtitulo">e mochilas</div>
+          <div class="mensagem-destaque">NO ARMÁRIO</div>
+          <div class="descritivo">atrás!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide slide-2">
+      <div class="conteudo-wrapper">
+        <div class="icon-grande"><i class="fas fa-book"></i></div>
+        <div class="titulo-principal">Biblioteca</div>
+        <div class="card-info">
+          <div class="descritivo">📖 Horário de Funcionamento</div>
+          <div class="mensagem-destaque">9h00 às 21h00</div>
+          <div class="descritivo">Venha aproveitar nosso acervo!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide slide-3">
+      <div class="conteudo-wrapper">
+        <div class="icon-grande"><i class="fas fa-user-check"></i></div>
+        <div class="titulo-principal">Novo Aqui?</div>
+        <div class="card-info">
+          <div class="subtitulo">Realize seu</div>
+          <div class="mensagem-destaque">Cadastro</div>
+          <div class="descritivo">
+            no balcão com nosso recepcionista<br />para emprestar livros
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide slide-4">
+      <div class="conteudo-wrapper">
+        <div class="icon-grande"><i class="fas fa-laptop"></i></div>
+        <div class="titulo-principal">Computadores</div>
+        <div class="card-info">
+          <div class="descritivo">Use livremente para</div>
+          <div class="mensagem-destaque">Fins Acadêmicos</div>
+          <div class="descritivo">
+            Com responsabilidade<br />e respeito às normas
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide slide-5">
+      <div class="conteudo-wrapper">
+        <div class="icon-grande"><i class="fas fa-door-open"></i></div>
+        <div class="titulo-principal">Sala de Estudo</div>
+        <div class="card-info">
+          <div class="descritivo">Uso exclusivo mediante</div>
+          <div class="mensagem-destaque">Reserva Prévia</div>
+          <div class="descritivo">
+            Fale com nosso recepcionista<br />para reservar seu espaço
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- � BARRA DE BOTÕES SUPERIOR DIREITA -->
+  <div class="botoes-toolbar">
+    <!-- 🔲 BOTÃO TELA CHEIA -->
+    <button class="btn-toolbar tela-cheia" id="botao-fullscreen" onclick="alternarTelaCheia()" title="Tela cheia (⛶)">
+      <img src="bootstrap/fullscreen.svg" alt="Tela cheia" class="icon-btn" width="24" height="24">
+    </button>
+
+    <!-- 📚 BOTÃO BIBLIOTECA -->
+    <button class="btn-toolbar biblioteca" onclick="abrirModoGoogleFullscreen()"
+      title="📚 Abrir Biblioteca (Fullscreen protegido)">
+      <img src="bootstrap/book.svg" alt="Biblioteca" class="icon-btn" width="24" height="24">
+    </button>
+
+    <!-- ⚙️ BOTÃO ADMIN -->
+    <button class="btn-toolbar admin" onclick="abrirAdmin()" title="⚙️ Painel Admin">
+      <img src="bootstrap/nut.svg" alt="Admin" class="icon-btn" width="24" height="24">
+    </button>
+  </div>
+
+  <!-- 🌐 MODO BIBLIOTECA FULLSCREEN -->
+  <div id="modo-google-fullscreen" class="modo-google-fullscreen">
+
+    <!-- Zona invisível no canto: captura hover mesmo sobre iframe em fullscreen -->
+    <div id="zona-escape" class="zona-escape"></div>
+
+    <!-- Botão flutuante de saída -->
+    <button id="btn-sair-biblioteca" class="btn-sair-biblioteca" onclick="sairModoGoogleFullscreen()"
+      title="Sair da Biblioteca (Esc)" aria-label="Fechar biblioteca">
+      <img src="bootstrap/escape.svg" alt="Sair" class="btn-sair-biblioteca__icon" draggable="false" />
+    </button>
+
+    <iframe id="iframe-google" class="iframe-google" src="https://biblio.cps.sp.gov.br/"
+      title="Biblioteca CPS - Site"></iframe>
+  </div>
+
+  <!-- SCRIPTS EXTERNOS -->
+  <script type="module" src="src/js/index.js"></script>
+  <script src="src/js/display-manager.js"></script>
+
+  <!-- ⚡ CORREÇÃO CORS + FULLSCREEN (deve rodar ANTES do webrtc-display.js) -->
+  <script>
+    // 1) Toda <video>/<img> nova já nasce com CORS anônimo (permite captureStream)
+    const _origCreate = document.createElement.bind(document);
+    document.createElement = function (tag) {
+      const el = _origCreate(tag);
+      if (/^(video|img)$/i.test(tag)) {
+        try { el.crossOrigin = "anonymous"; } catch (_) { }
+      }
+      return el;
+    };
+
+    // 1b) Marcador periódico: a cada 500ms, força crossOrigin em qualquer <video>/<img> recém-criado
+    setInterval(() => {
+      document.querySelectorAll('video:not([crossorigin]), img:not([crossorigin])').forEach(el => {
+        try { el.crossOrigin = "anonymous"; } catch (_) { }
+      });
+    }, 500);
+
+    // 2) Fullscreen só funciona em gesto do usuário — encapsula em try/catch silencioso
+    const _rfs = Element.prototype.requestFullscreen;
+    Element.prototype.requestFullscreen = function () {
+      try { return _rfs.apply(this, arguments).catch(() => { }); }
+      catch (e) { return Promise.resolve(); }
+    };
+  </script>
+
+  <script src="src/js/webrtc-display.js"></script>
+
+  <!-- INDICADOR DE STATUS FIREBASE -->
+  <div id="firebase-status">Firebase</div>
+
+  <!-- PAINEL DE CONFIGURAÇÃO DO DISPLAY -->
+  <div id="display-config" style="
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.9);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    z-index: 9999;
+    max-width: 300px;
+    font-family: monospace;
+    display: none;
+  ">
+    <div style="margin-bottom: 8px;">
+      <strong>🖥️ Display ID:</strong>
+      <div id="display-id-valor" style="color: #0f0; font-size: 10px; word-break: break-all;">Carregando...</div>
+    </div>
+    <div style="margin-bottom: 8px;">
+      <strong>📝 Nome:</strong>
+      <div style="display: flex; gap: 5px;">
+        <input id="display-nome-input" type="text" placeholder="Nome do display" style="
+          flex: 1;
+          padding: 4px;
+          border: 1px solid #333;
+          background: #111;
+          color: #fff;
+          border-radius: 3px;
+          font-size: 11px;
+        ">
+        <button id="display-rename-btn" style="
+          padding: 4px 8px;
+          background: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 3px;
+          cursor: pointer;
+          font-size: 11px;
+          font-weight: bold;
+        ">✓</button>
+      </div>
+    </div>
+    <div style="color: #999; font-size: 10px;">
+      Status: <span id="display-status">Conectando...</span>
+    </div>
+  </div>
+
+  <!-- ELEMENTO DE ÁUDIO PARA BOLSAS -->
+  <audio id="som-atencao" preload="auto">
+    <source src="assets/sounds/bolsas.mp3" type="audio/mpeg">
+  </audio>
+</body>
+
+</html>

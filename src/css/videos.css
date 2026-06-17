@@ -1,0 +1,273 @@
+/* ═══════════════════════════════════════════════════════════════
+   🎬 SLIDES DE VÍDEO - CSS
+   Arquivo: src/css/videos.css
+   Responsabilidade: Estilos para slides de vídeo no display (index)
+                     e para o formulário de upload no admin
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────
+   🖥️ DISPLAY (index.html) — Slide de vídeo
+   ────────────────────────────────────────── */
+
+/* Slide especial: fundo preto para vídeo */
+.slide-video {
+  background: #000 !important;
+}
+
+/* Vídeo ocupa a tela inteira */
+.video-tela-cheia {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* mantém proporção, sem cortar */
+  z-index: 2;
+  display: block;
+  background: #000;
+}
+
+/* Overlay de loading exibido enquanto o vídeo não inicia */
+.video-loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-size: 1.2rem;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.video-loading-overlay.oculto {
+  opacity: 0;
+}
+
+.video-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: girarSpinner 0.9s linear infinite;
+}
+
+@keyframes girarSpinner {
+  to { transform: rotate(360deg); }
+}
+
+/* Badge de tipo "vídeo" no canto do slide (info discreta) */
+.video-badge-tipo {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Mostra badge apenas quando o slide está ativo */
+.slide.active .video-badge-tipo {
+  opacity: 1;
+}
+
+/* ──────────────────────────────────────────
+   🛠️ ADMIN — Aba de upload de vídeo
+   ────────────────────────────────────────── */
+
+/* Container de preview do vídeo no admin */
+#preview-container-video-admin {
+  margin-bottom: 20px;
+}
+
+/* Elemento de preview do vídeo */
+#preview-video-admin {
+  display: none;
+  width: 100%;
+  max-height: 260px;
+  border-radius: 10px;
+  background: #000;
+  margin-bottom: 10px;
+  outline: none;
+  object-fit: contain;
+}
+
+/* Nome do arquivo selecionado */
+.nome-arquivo-video {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  word-break: break-all;
+  min-height: 18px;
+}
+
+/* Caixa de informações do vídeo (duração, tamanho, formato) */
+.video-info-box {
+  display: none; /* exibido via JS após seleção */
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.video-info-box.visivel {
+  display: flex;
+}
+
+.video-info-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.video-info-item strong {
+  color: #fff;
+}
+
+/* Aviso de tamanho quando arquivo é grande (>= 8 MB) */
+.video-aviso-tamanho {
+  display: none;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #fbbf24;
+  line-height: 1.5;
+}
+
+.video-aviso-tamanho.visivel {
+  display: block;
+}
+
+/* Aviso de erro (formato não suportado) */
+.video-aviso-erro {
+  display: none;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #f87171;
+}
+
+.video-aviso-erro.visivel {
+  display: block;
+}
+
+/* Barra de progresso de upload/conversão */
+.video-progress-bar-wrapper {
+  display: none;
+  margin-bottom: 16px;
+}
+
+.video-progress-bar-wrapper.visivel {
+  display: block;
+}
+
+.video-progress-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.video-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.video-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 99px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Opção de exibição: contain vs cover */
+.video-opcao-ajuste {
+  margin-bottom: 16px;
+}
+
+.video-opcao-ajuste label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.video-ajuste-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-ajuste-video {
+  flex: 1;
+  padding: 8px 0;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-ajuste-video:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.btn-ajuste-video.ativo {
+  background: rgba(102, 126, 234, 0.25);
+  border-color: #667eea;
+  color: #fff;
+}
+
+/* Preview admin — ajuste dinâmico de object-fit */
+#preview-video-admin.ajuste-contain { object-fit: contain; }
+#preview-video-admin.ajuste-cover   { object-fit: cover;   }
+
+/* ──────────────────────────────────────────
+   📋 LISTA DE SLIDES — badge Vídeo
+   ────────────────────────────────────────── */
+
+.badge-video {
+  background: rgba(118, 75, 162, 0.25);
+  border: 1px solid rgba(118, 75, 162, 0.6);
+  color: #c084fc;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}

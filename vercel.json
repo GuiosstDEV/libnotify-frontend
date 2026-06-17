@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "public": true,
+  "env": {
+    "NEXT_PUBLIC_API_URL": "@api_url"
+  },
+  "routes": [
+    {
+      "src": "/admin.html",
+      "dest": "/admin.html"
+    },
+    {
+      "src": "/index.html",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/test-load.html",
+      "dest": "/test-load.html"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(.*)\\.js",
+      "dest": "/js/$1.min.js"
+    },
+    {
+      "src": "/(.*)\\.css",
+      "dest": "/css/$1.min.css"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

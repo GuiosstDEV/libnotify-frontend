@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#667eea" />
+  <title>LibNotify — Painel Admin</title>
+
+  <!-- PWA MANIFEST -->
+  <link rel="manifest" href="manifest-admin.json" />
+  <link rel="icon" type="image/png" href="./assets/imagem/libnotify-icon.png" />
+  <link rel="apple-touch-icon" href="./assets/imagem/libnotify-icon.png" />
+
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <!-- ESTILOS -->
+  <link rel="stylesheet" href="src/css/admin.css" />
+
+</head>
+
+<body>
+  <!-- ══════════════════════════════════════
+     🔐 TELA DE LOGIN
+     ══════════════════════════════════════ -->
+  <div id="tela-login">
+    <button type="button" id="btn-voltar-index-login" onclick="window.location.href='index.html'" title="Voltar à tela principal (LibNotify)">
+      ← Voltar ao início
+    </button>
+    <!-- SELEÇÃO DE PERFIL -->
+    <div id="selecao-perfil" style="display: flex; gap: 30px; align-items: center; justify-content: center;">
+      <button onclick="selecionarPerfil('admin')" style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        background: transparent;
+        border: 2px solid #667eea;
+        border-radius: 12px;
+        padding: 25px 35px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: white;
+        width: 160px;
+        height: 160px;
+      " onmouseover="this.style.background='rgba(102, 126, 234, 0.1)'; this.style.transform='scale(1.05)';"
+        onmouseout="this.style.background='transparent'; this.style.transform='scale(1)';">
+        <img src="bootstrap/person-fill-gear.svg" alt="Admin" width="48" height="48"
+          style="filter: brightness(0) invert(1);">
+        <div style="font-size: 18px; font-weight: 600;">ADMIN</div>
+      </button>
+
+      <button onclick="selecionarPerfil('controlador')" style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        background: transparent;
+        border: 2px solid #667eea;
+        border-radius: 12px;
+        padding: 25px 35px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: white;
+        width: 160px;
+        height: 160px;
+      " onmouseover="this.style.background='rgba(102, 126, 234, 0.1)'; this.style.transform='scale(1.05)';"
+        onmouseout="this.style.background='transparent'; this.style.transform='scale(1)';">
+        <img src="bootstrap/controller.svg" alt="Controlador" width="48" height="48"
+          style="filter: brightness(0) invert(1);">
+        <div style="font-size: 18px; font-weight: 600;">CONTROLADOR</div>
+      </button>
+    </div>
+
+    <!-- TELA DE SENHA (mostrada após selecionar perfil) -->
+    <div id="tela-senha-login" style="display: none;">
+      <div class="login-box">
+        <img id="perfil-icon" src="bootstrap/person-fill-gear.svg" alt="Perfil" class="login-icon" width="48"
+          height="48">
+        <h1 id="perfil-titulo">ADMIN</h1>
+        <input type="password" id="input-senha" class="input-login" placeholder="••••••" maxlength="20"
+          onkeydown="if (event.key === 'Enter') fazerLogin();" />
+        <button class="btn-login" id="btn-login" onclick="fazerLogin()" title="Desbloquear">
+          <img src="bootstrap/lock-fill.svg" alt="Entrar" width="24" height="24">
+          <span id="btn-login-text">Entrar</span>
+        </button>
+        <p class="login-erro" id="erro-login">❌ Senha incorreta</p>
+        <button onclick="voltarSelecaoPerfil()" style="
+          background: transparent;
+          color: #999;
+          border: 1px solid #999;
+          border-radius: 8px;
+          padding: 8px 16px;
+          font-size: 12px;
+          cursor: pointer;
+          margin-top: 15px;
+          transition: all 0.2s;
+        " onmouseover="this.style.color='white'; this.style.borderColor='white';"
+          onmouseout="this.style.color='#999'; this.style.borderColor='#999';">
+          Voltar
+        </button>
+        <button type="button" onclick="window.location.href='index.html'" style="
+          display: block;
+          width: 100%;
+          background: transparent;
+          color: #667eea;
+          border: 1px solid #667eea;
+          border-radius: 8px;
+          padding: 8px 16px;
+          font-size: 12px;
+          cursor: pointer;
+          margin-top: 10px;
+          transition: all 0.2s;
+        " onmouseover="this.style.background='rgba(102, 126, 234, 0.15)';"
+          onmouseout="this.style.background='transparent';"
+          title="Abrir a página principal LibNotify">
+          ← Voltar ao início
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+     🎛️ PAINEL ADMIN
+     ══════════════════════════════════════ -->
+  <div id="painel-admin">
+    <div class="topbar">
+      <h1>� ADMIN</h1>
+      <div class="topbar-direita">
+        <span id="firebase-badge">⏳ Conectando...</span>
+        <button class="btn-sair" onclick="fazerLogout()">Sair</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- CONTROLES RÁPIDOS -->
+      <div class="section-title"><img src="bootstrap/dpad.svg" alt="Controles" class="section-icon"> Controles rápidos
+      </div>
+      <div class="controles-grid">
+        <div class="card-ctrl verde" onclick="retomarPreview()">
+          <img src="bootstrap/arrow-clockwise.svg" alt="Retomar" class="icon">
+          <div class="label">Retomar</div>
+          <div class="sub">Continuar passagem</div>
+        </div>
+        <div class="card-ctrl amarelo" onclick="pausarPreview()">
+          <img src="bootstrap/pause.svg" alt="Pausar" class="icon">
+          <div class="label">Pausar</div>
+          <div class="sub">Travar no slide atual</div>
+        </div>
+        <div class="card-ctrl" onclick="irParaSlidePreview(0)">
+          <img src="bootstrap/skip-backward.svg" alt="Primeiro Slide" class="icon">
+          <div class="label">Primeiro Slide</div>
+          <div class="sub">Ir para o início</div>
+        </div>
+        <div class="card-ctrl" onclick="sincronizarSlidesFirebase()">
+          <img src="bootstrap/arrow-repeat.svg" alt="Sincronizar" class="icon">
+          <div class="label">Sincronizar</div>
+          <div class="sub">Enviar slides ao display</div>
+        </div>
+      </div>
+
+      <!-- IR PARA SLIDE -->
+      <div class="section-title"><img src="bootstrap/bullseye.svg" alt="Ir para slide" class="section-icon"> Ir para
+        slide</div>
+      <div class="botoes-slides-container">
+        <div class="botoes-slides-grid" id="botoes-slides">
+          <!-- Os botões serão gerados dinamicamente aqui -->
+        </div>
+      </div>
+
+      <!-- PREVIEW EM TEMPO REAL -->
+      <div class="section-title"><img src="bootstrap/display.svg" alt="Preview" class="section-icon"> Preview em tempo
+        real</div>
+      <div id="secao-preview" style="
+          background: var(--bg2);
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          padding: 18px;
+          margin-bottom: 8px;
+        ">
+        <div class="preview-wrapper" id="preview-wrapper">
+          <!-- Card: Slide Atual -->
+          <div class="preview-card atual" id="preview-card-atual">
+            <div class="preview-label" style="display:flex;align-items:center;gap:6px;">
+              <span class="status-dot"></span>
+              Exibindo agora
+              <span id="preview-countdown" style="
+                margin-left:auto;
+                background:rgba(255,255,255,0.1);
+                border-radius:20px;
+                padding:2px 10px;
+                font-size:12px;
+                font-weight:700;
+                color:var(--accent);
+                min-width:36px;
+                text-align:center;
+                transition:color 0.3s;
+              ">—</span>
+            </div>
+            <div class="preview-content-area" id="preview-area-atual">
+              <div class="preview-empty">
+                <span class="preview-empty-icon">📺</span>
+                <span>Aguardando dados...</span>
+              </div>
+            </div>
+            <div class="preview-footer" id="preview-footer-atual">
+              <span class="preview-slide-num" id="preview-num-atual">—</span>
+              <div class="preview-meta-tags" id="preview-tags-atual"></div>
+            </div>
+          </div>
+
+          <!-- Controle de navegação manual -->
+          <div style="display: flex; flex-direction: column; gap: 12px; justify-content: center; align-items: center;">
+            <!-- Seta animada -->
+            <div class="preview-arrow">
+              <img src="bootstrap/chevron-compact-right.svg" alt="Próximo" class="arrow-icon"
+                style="width: 32px; height: 32px; filter: brightness(0) invert(1);">
+              <span class="arrow-label">próximo</span>
+            </div>
+
+            <!-- Botões de navegação -->
+            <div style="display: flex; gap: 8px;">
+              <button onclick="previaPrevio()" style="
+                padding: 8px 12px;
+                background: var(--accent);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 600;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+              " onmouseover="this.style.opacity = '0.8'" onmouseout="this.style.opacity = '1'">
+                <img src="bootstrap/chevron-compact-left.svg" alt="Anterior"
+                  style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+                Anterior
+              </button>
+              <button onclick="proximaPreview()" style="
+                padding: 8px 12px;
+                background: var(--accent);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 600;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+              " onmouseover="this.style.opacity = '0.8'" onmouseout="this.style.opacity = '1'">
+                Próximo
+                <img src="bootstrap/chevron-compact-right.svg" alt="Próximo"
+                  style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+              </button>
+            </div>
+          </div>
+
+          <!-- Card: Próximo Slide -->
+          <div class="preview-card proximo" id="preview-card-proximo">
+            <div class="preview-label">Próximo</div>
+            <div class="preview-content-area" id="preview-area-proximo">
+              <div class="preview-empty">
+                <span class="preview-empty-icon">⏭️</span>
+                <span>—</span>
+              </div>
+            </div>
+            <div class="preview-footer" id="preview-footer-proximo">
+              <span class="preview-slide-num" id="preview-num-proximo">—</span>
+              <div class="preview-meta-tags" id="preview-tags-proximo"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADICIONAR NOVO SLIDE - COM ABAS -->
+      <div class="section-title"><img src="bootstrap/plus.svg" alt="Adicionar" class="section-icon"> Adicionar novo
+        slide</div>
+      <div class="form-slide">
+        <!-- ABAS -->
+        <div style="
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+          ">
+          <button class="aba-botao aba-ativo" onclick="mudarAbaAdmin('texto', this)" style="
+                padding: 10px 16px;
+                background: transparent;
+                border: none;
+                color: var(--text);
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                border-bottom: 3px solid var(--accent);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+              ">
+            <img src="bootstrap/file-earmark-text.svg" alt="Texto"
+              style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
+            Texto
+          </button>
+          <button class="aba-botao" onclick="mudarAbaAdmin('imagem', this)" style="
+                padding: 10px 16px;
+                background: transparent;
+                border: none;
+                color: var(--text2);
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                border-bottom: 3px solid transparent;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+              ">
+            <img src="bootstrap/file-image.svg" alt="Imagem"
+              style="width: 16px; height: 16px; filter: brightness(0) invert(1);">
+            Imagem
+          </button>
+          <button class="aba-botao" onclick="mudarAbaAdmin('video', this)" style="
+                padding: 10px 16px;
+                background: transparent;
+                border: none;
+                color: var(--text2);
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                border-bottom: 3px solid transparent;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+              ">
+            🎥
+            Vídeo
+          </button>
+        </div>
+
+        <!-- ABA TEXTO -->
+        <div id="aba-admin-texto" class="aba-conteudo" style="display: block;">
+          <!-- Container: Formulário + Preview -->
+          <div class="form-preview-wrapper">
+            <!-- LADO ESQUERDO: FORMULÁRIO -->
+            <div class="form-column">
+              <div class="form-row">
+                <div class="form-group" style="max-width: 100px">
+                  <label>Emoji/Ícone</label>
+                  <input type="text" id="f-emoji" class="form-input" placeholder="📌" maxlength="4" value="📌" oninput="atualizarPreviewTempoReal()" />
+                </div>
+                <div class="form-group">
+                  <label>Título</label>
+                  <input type="text" id="f-titulo" class="form-input" placeholder="Ex: Aviso Importante" oninput="atualizarPreviewTempoReal()" />
+                </div>
+                <div class="form-group" style="max-width: 100px">
+                  <label>Duração (s)</label>
+                  <input type="number" id="f-duracao" class="form-input" min="3" max="60" value="10" oninput="atualizarPreviewTempoReal()" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Texto descritivo</label>
+                  <textarea id="f-descritivo" class="form-textarea" placeholder="Texto de apoio ao título..." oninput="atualizarPreviewTempoReal()"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Texto de destaque</label>
+                  <input type="text" id="f-destaque" class="form-input" placeholder="Ex: SOMENTE HOJE" oninput="atualizarPreviewTempoReal()" />
+                  <label style="margin-top: 8px">Texto final (opcional)</label>
+                  <input type="text" id="f-final" class="form-input" placeholder="Ex: Informações no balcão" oninput="atualizarPreviewTempoReal()" />
+                </div>
+              </div>
+              <div class="cores-row">
+                <div class="cor-item">
+                  <label>Fundo</label>
+                  <input type="color" id="f-cor-fundo" value="#2d3561" oninput="atualizarPreviewTempoReal()" />
+                </div>
+                <div class="cor-item">
+                  <label>Título</label>
+                  <input type="color" id="f-cor-titulo" value="#667eea" oninput="atualizarPreviewTempoReal()" />
+                </div>
+                <div class="cor-item">
+                  <label>Destaque</label>
+                  <input type="color" id="f-cor-destaque" value="#ffdd00" oninput="atualizarPreviewTempoReal()" />
+                </div>
+              </div>
+            </div>
+
+            <!-- LADO DIREITO: PREVIEW -->
+            <div class="preview-column">
+              <div class="preview-label-header">
+                👁️ Preview em Tempo Real
+              </div>
+              <div class="preview-box-tempo-real" id="preview-tempo-real">
+                <div class="preview-conteudo-tempo-real" id="preview-conteudo-tempo-real">
+                  <div class="preview-empty">
+                    <span class="preview-empty-icon">👀</span>
+                    <span>Comece a digitar...</span>
+                  </div>
+                </div>
+                <div class="preview-footer-tempo-real" id="preview-footer-tempo-real">
+                  <span class="preview-duracao-tempo-real" id="preview-duracao-tempo-real">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-action btn-verde" onclick="adicionarSlideAdmin()"
+              style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <img src="bootstrap/check-lg.svg" alt="Adicionar"
+                style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+              Adicionar slide
+            </button>
+            <button class="btn-action btn-vermelho" onclick="limparFormulario()"
+              style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <img src="bootstrap/archive-fill.svg" alt="Limpar"
+                style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+              Limpar
+            </button>
+          </div>
+        </div>
+
+        <!-- ABA IMAGEM -->
+        <div id="aba-admin-imagem" class="aba-conteudo" style="display: none;">
+          <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 2vh">
+            Selecione uma imagem para criar um novo slide
+          </p>
+
+          <input type="file" id="arquivo-imagem-admin" class="input-arquivo" accept="image/*"
+            onchange="previewImagemAdmin()" style="display: none" />
+          <label for="arquivo-imagem-admin" class="label-arquivo" style="
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 24px;
+                background: linear-gradient(135deg, var(--accent), var(--accent2));
+                color: white;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+                text-align: center;
+                margin-bottom: 20px;
+              ">
+            <img src="bootstrap/folder.svg" alt="Pasta"
+              style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+            Escolher Imagem
+          </label>
+
+          <div id="preview-container-admin" style="margin-bottom: 20px;">
+            <img id="preview-admin" class="preview-imagem" style="
+                max-width: 100%;
+                max-height: 300px;
+                display: none;
+                border-radius: 8px;
+                margin-bottom: 10px;
+              " alt="Preview da imagem" />
+            <div id="nome-arquivo-admin" class="nome-arquivo"></div>
+          </div>
+
+          <!-- DURAÇÃO -->
+          <div style="margin: 2vh 0">
+            <label style="
+                  color: rgba(255, 255, 255, 0.7);
+                  font-size: 12px;
+                  display: block;
+                  margin-bottom: 0.5vh;
+                ">⏱️ Duração em segundos</label>
+            <input type="number" id="duracao-imagem-input-admin" min="3" max="60" value="10" style="
+                  width: 100%;
+                  padding: 1vh;
+                  background: rgba(255, 255, 255, 0.1);
+                  border: 1px solid rgba(255, 255, 255, 0.2);
+                  border-radius: 8px;
+                  color: white;
+                  font-size: 16px;
+                " />
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-action btn-verde" onclick="adicionarSlideComImagemAdmin()"
+              style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <img src="bootstrap/check-lg.svg" alt="Adicionar"
+                style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+              Adicionar Slide
+            </button>
+            <button class="btn-action btn-vermelho" onclick="limparFormulario()"
+              style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <img src="bootstrap/archive-fill.svg" alt="Limpar"
+                style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+              Limpar
+            </button>
+          </div>
+        </div>
+
+        <!-- ABA VÍDEO -->
+        <div id="aba-admin-video" class="aba-conteudo" style="display: none;">
+          <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 2vh">
+            Selecione um vídeo para criar um novo slide
+          </p>
+
+          <input type="file" id="arquivo-video-admin" class="input-arquivo" accept="video/*"
+            onchange="previewVideoAdmin()" style="display: none" />
+          <label for="arquivo-video-admin" class="label-arquivo" style="
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 24px;
+                background: linear-gradient(135deg, var(--accent), var(--accent2));
+                color: white;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+                text-align: center;
+                margin-bottom: 20px;
+              ">
+            <img src="bootstrap/folder.svg" alt="Pasta"
+              style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+            Escolher Vídeo
+          </label>
+
+          <div id="preview-container-video" style="margin-bottom: 20px;">
+            <video id="preview-video" class="preview-video" style="
+                max-width: 100%;
+                max-height: 300px;
+                display: none;
+                border-radius: 8px;
+                margin-bottom: 10px;
+                background: #000;
+              " controls></video>
+            <div id="nome-arquivo-video" class="nome-arquivo"></div>
+            <div id="tamanho-arquivo-video" style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-top: 5px;">
+            </div>
+          </div>
+
+          <!-- DURAÇÃO -->
+          <div style="margin: 2vh 0">
+            <label style="
+                  color: rgba(255, 255, 255, 0.7);
+                  font-size: 12px;
+                  display: block;
+                  margin-bottom: 0.5vh;
+                ">⏱️ Duração em segundos</label>
+            <input type="number" id="duracao-video-input-admin" min="3" max="120" value="15" style="
+                  width: 100%;
+                  padding: 1vh;
+                  background: rgba(255, 255, 255, 0.1);
+                  border: 1px solid rgba(255, 255, 255, 0.2);
+                  border-radius: 8px;
+                  color: white;
+                  font-size: 16px;
+                " />
+          </div>
+
+          <div style="margin: 2vh 0">
+            <label style="
+                  color: rgba(255, 255, 255, 0.7);
+                  font-size: 12px;
+                  display: block;
+                  margin-bottom: 0.5vh;
+                ">📝 Título (opcional)</label>
+            <input type="text" id="titulo-video-admin" placeholder="Digite um título para o vídeo" style="
+                  width: 100%;
+                  padding: 1vh;
+                  background: rgba(255, 255, 255, 0.1);
+                  border: 1px solid rgba(255, 255, 255, 0.2);
+                  border-radius: 8px;
+                  color: white;
+                  font-size: 16px;
+                " />
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-action btn-verde" onclick="adicionarSlideComVideoAdmin()"
+              style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <img src="bootstrap/check-lg.svg" alt="Adicionar"
+                style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+              Enviar Vídeo
+            </button>
+            <button class="btn-action btn-vermelho" onclick="limparFormulario()"
+              style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <img src="bootstrap/archive-fill.svg" alt="Limpar"
+                style="width: 18px; height: 18px; filter: brightness(0) invert(1);">
+              Limpar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LISTA DE SLIDES -->
+      <div class="section-title"><img src="bootstrap/collection.svg" alt="Slides" class="section-icon"> Slides atuais
+      </div>
+      <div class="slides-lista" id="lista-slides">
+        <div style="padding: 20px; text-align: center; color: var(--text2)">
+          Carregando slides...
+        </div>
+      </div>
+
+      <!-- CONFIGURAÇÃO FIREBASE -->
+      <div class="section-title"><img src="bootstrap/nut.svg" alt="Configuração" class="section-icon"> Configuração do
+        Firebase</div>
+      <div class="config-box">
+        <p>
+          Para funcionar, você precisa preencher o
+          <code>firebaseConfig</code> em
+          <strong>ambos os arquivos</strong> (<code>index.html</code> e
+          <code>admin.html</code>) com os dados do seu projeto Firebase.
+        </p>
+        <p>
+          Acesse <strong>firebase.google.com</strong> → Seu projeto →
+          Configurações do projeto → SDK e copie o objeto
+          <code>firebaseConfig</code>.
+        </p>
+        <p>
+          No <strong>Realtime Database</strong>, configure as regras para:
+        </p>
+        <pre style="
+              background: rgba(0, 0, 0, 0.4);
+              padding: 12px;
+              border-radius: 8px;
+              font-size: 12px;
+              color: #a0b4ff;
+              overflow-x: auto;
+              margin-top: 8px;
+            ">
+{
+  "rules": {
+    "libnotify": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}</pre>
+        <p style="margin-top: 12px; color: var(--yellow)">
+          ⚠️ Após configurar, faça deploy dos dois arquivos no Vercel
+          normalmente.
+        </p>
+      </div>
+
+      <!-- 🖥️ GERENCIAMENTO DE DISPLAYS -->
+      <div class="section-title"><img src="bootstrap/display.svg" alt="Displays" class="section-icon"> Displays
+        conectados</div>
+      <div id="wrapper-displays-bloco">
+        <div id="barra-mute-video-displays" style="
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          flex-wrap: wrap;
+          margin-bottom: 12px;
+          padding: 12px 14px;
+          background: var(--bg2);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+        ">
+          <button type="button" id="btn-mute-video-displays" onclick="alternarMuteVideoNosDisplays()" style="
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+          " onmouseover="this.style.background='#0284c7'" onmouseout="this.style.background='#0ea5e9'"
+            title="Controla o áudio apenas nos slides que são vídeo">
+            🔊 Ativar som do vídeo
+          </button>
+          <label id="label-volume-video-wrap" for="slider-volume-video-displays" style="
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255,255,255,0.85);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+          ">
+            <span title="Volume do vídeo nos displays (slide atual)">🔉 Volume</span>
+            <input type="range" id="slider-volume-video-displays" min="0" max="100" value="100" step="1"
+              style="width: 140px; accent-color: #22d3ee;" />
+            <span id="label-volume-video-displays" style="min-width: 40px; font-variant-numeric: tabular-nums;">100%</span>
+          </label>
+          <span id="hint-mute-video-displays" style="font-size: 12px; color: rgba(255,255,255,0.55); max-width: 420px;">
+            Afeta somente os displays: vídeos fora do slide atual ficam sempre silenciados e pausados.
+          </span>
+        </div>
+        <div id="container-displays" style="
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px;
+      ">
+        <div style="text-align: center; color: #999; padding: 20px;">
+          <p>📺 Carregando displays...</p>
+        </div>
+      </div>
+      </div>
+    </div>
+    <!-- /container -->
+  </div>
+  <!-- /painel-admin -->
+
+  <div id="toast"></div>
+
+  <!-- ══════════════════════════════════════
+     � CONFIGURAÇÃO GLOBAL E SLIDES PADRÃO
+     ══════════════════════════════════════ -->
+  <script>
+    // ════════════════════════════════════
+    // 🗂️ SLIDES PADRÃO (não editáveis)
+    // ════════════════════════════════════
+    const SLIDES_PADRAO = [
+      {
+        titulo: "⚠️ ATENÇÃO - Guarde suas bolsas",
+        tipo: "padrao",
+        duracao: 10,
+      },
+      {
+        titulo: "📚 Biblioteca – Horário 9h–21h",
+        tipo: "padrao",
+        duracao: 8,
+      },
+      {
+        titulo: "👤 Novo Aqui? Faça seu cadastro",
+        tipo: "padrao",
+        duracao: 9,
+      },
+      {
+        titulo: "💻 Computadores – Fins Acadêmicos",
+        tipo: "padrao",
+        duracao: 7,
+      },
+      {
+        titulo: "🚪 Sala de Estudo – Reserva Prévia",
+        tipo: "padrao",
+        duracao: 8,
+      },
+    ];
+
+    // Exportar para window
+    window.SLIDES_PADRAO = SLIDES_PADRAO;
+    console.log("✅ Configuração carregada");
+  </script>
+
+  <!-- Carregar cliente HTTP -->
+  <script src="src/js/api-client.js"></script>
+
+  <!-- Carregar a lógica do admin panel (separada em arquivo externo) -->
+  <script defer src="src/js/admin.js"></script>
+  <script defer src="src/js/webrtc-admin.js"></script>
+
+</body>
+
+</html>

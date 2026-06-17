@@ -1,0 +1,177 @@
+/* ========================================
+   🖥️ GERENCIAMENTO DE DISPLAYS - ESTILOS
+   ======================================== */
+
+.btn-display {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 1vh 1.5vw;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-display:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-display:active {
+  transform: translateY(0);
+}
+
+/* 🆕 Variações específicas */
+.btn-display.btn-renomear {
+  background: rgba(255, 221, 0, 0.18);
+  border-color: rgba(255, 221, 0, 0.45);
+}
+.btn-display.btn-renomear:hover {
+  background: rgba(255, 221, 0, 0.3);
+  border-color: rgba(255, 221, 0, 0.7);
+}
+
+.btn-display.btn-deletar {
+  background: rgba(255, 68, 68, 0.18);
+  border-color: rgba(255, 68, 68, 0.45);
+}
+.btn-display.btn-deletar:hover {
+  background: rgba(255, 68, 68, 0.32);
+  border-color: rgba(255, 68, 68, 0.75);
+}
+
+#container-displays {
+  padding: 2vh 2vw;
+}
+
+.display-badge {
+  display: inline-block;
+  background: rgba(0, 255, 0, 0.2);
+  border: 1px solid rgba(0, 255, 0, 0.5);
+  color: #0f0;
+  padding: 0.3vh 0.8vw;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+/* ════════════════════════════════════════
+   🆕 MODAL DE RENOMEAR DISPLAY
+   ════════════════════════════════════════ */
+.modal-rename-display {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-rename-display.aberto {
+  display: flex;
+  animation: modalRenameFadeIn 0.18s ease;
+}
+
+@keyframes modalRenameFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-rename-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.modal-rename-conteudo {
+  position: relative;
+  background: #1a1f3a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 24px 28px;
+  width: min(440px, 92vw);
+  color: #fff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+.modal-rename-titulo {
+  margin: 0 0 14px;
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+.modal-rename-info {
+  margin: 4px 0;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.7);
+  word-break: break-all;
+}
+
+.modal-rename-label {
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.modal-rename-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 1em;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.modal-rename-input:focus {
+  border-color: #667eea;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-rename-acoes {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-modal-rename {
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.95em;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.btn-modal-cancelar {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.btn-modal-cancelar:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.btn-modal-confirmar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+.btn-modal-confirmar:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}

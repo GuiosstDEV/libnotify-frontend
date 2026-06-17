@@ -1,0 +1,52 @@
+{
+    "name": "LibNotify",
+    "short_name": "LibNotify",
+    "description": "LibNotify - Sistema de avisos e informações para biblioteca em tempo real",
+    "start_url": "./index.html",
+    "display": "fullscreen",
+    "background_color": "#0a0e27",
+    "theme_color": "#667eea",
+    "orientation": "landscape",
+    "icons": [
+        {
+            "src": "./assets/imagem/libnotify-icon.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "./assets/imagem/libnotify-icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%232d2d4d' width='512' height='512' rx='100'/><g transform='translate(150,180)'><rect width='120' height='160' fill='%23a855f7' rx='8'/><rect x='30' width='120' height='160' fill='%237c3aed' rx='8' opacity='0.7'/></g><g transform='translate(280,150)'><path d='M 0,60 Q 0,0 60,0 Q 120,0 120,60 L 120,80 Q 120,120 60,120 Q 0,120 0,80 Z' fill='white'/><circle cx='60' cy='100' r='15' fill='%23a855f7'/></g></svg>",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%230a0e27' width='540' height='720'/><rect fill='%23667eea' width='540' height='200' y='250'/><text x='270' y='380' font-size='80' fill='white' text-anchor='middle' font-weight='bold'>Avisos</text></svg>",
+            "sizes": "540x720",
+            "form_factor": "narrow"
+        }
+    ],
+    "categories": ["productivity", "information"],
+    "shortcuts": [
+        {
+            "name": "Próximo Aviso",
+            "short_name": "Próximo",
+            "description": "Ir para o próximo slide",
+            "url": "/avisos/aviso_slides.html?action=next",
+            "icons": [
+                {
+                    "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23667eea' width='96' height='96'/><text x='48' y='65' font-size='60' fill='white' text-anchor='middle'>▶</text></svg>",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ]
+}
